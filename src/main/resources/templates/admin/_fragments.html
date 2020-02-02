@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:replace="${title}"></title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <link rel="stylesheet" href="../../static/lib/editormd/css/editormd.min.css" th:href="@{/lib/editormd/css/editormd.min.css}">
+    <link rel="stylesheet" href="../static/css/me.css" th:href="@{/css/me.css}">
+</head>
+<body>
+    <!--导航-->
+    <nav th:fragment="menu(n)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
+        <div class="ui container">
+            <div class="ui inverted secondary stackable menu">
+                <h2 class="ui teal header item">管理后台</h2>
+                <a href="#" th:href="@{/admin/blogs}" class="m-item item m-mobile-hide" th:classappend="${n==1} ? 'active'"><i class="home icon"></i>博客</a>
+                <a href="#" th:href="@{/admin/types}" class=" m-item item m-mobile-hide" th:classappend="${n==2} ? 'active'"><i class="idea icon"></i>分类</a>
+                <a href="#" th:href="@{/admin/tags}" class="m-item item m-mobile-hide" th:classappend="${n==3} ? 'active'"><i class="tags icon"></i>标签</a>
+                <!-- 头像信息 -->
+                <div class="right aligned menu">
+                    <div class="ui m-item m-mobile-hide dropdown item">
+                        <div class="default">
+                            <img class="ui avatar image" src="https://unsplash.it/100/100?image=1005" th:src="${session.user.avatar}">
+                            <span th:text="${session.user.nickname}"></span>
+                        </div>
+                        <i class="icon dropdown"></i>
+                        <!-- 弹出的注销和修改密码的功能 -->
+                        <div class="menu">
+                            <a href="#" th:href="@{/admin/logout}" class="item">注销</a>
+                            <button type="button" onclick="updatePassword(this)" class="item">修改密码</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+            <i class="sidebar icon"></i>
+        </a>
+    </nav>
+<!--    模态框-->
+    <div class="ui mini modal" th:fragment="passwordModal">
+        <i class="icon close"></i>
+        <form class="ui form" method="post" th:action="@{/admin/updatePassword}">
+            <input type="hidden" name="username" th:value="${session.user.username}">
+            <div class="ui segment secondary">
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="user icon"></i>
+                        <input type="password" name="oldPassword" placeholder="旧密码">
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="lock icon"></i>
+                        <input type="password" name="newPassword" placeholder="新密码">
+                    </div>
+                </div>
+                <button class="ui fluid large teal submit button">修改</button>
+            </div>
+
+            <!--      前端的表单验证信息显示-->
+            <div class="ui error mini message"></div>
+        </form>
+    </div>
+    <footer th:fragment="footer" class="ui inverted vertical segment m-padded-tb-massive">
+        <div class="ui center aligned container">
+            <div class="ui inverted divided stackable grid">
+                <div class="three wide column">
+                    <div class="ui inverted link list">
+                        <div class="item">
+                            <img src="../../static/images/wechat.png" th:src="@{#{wechat.url}}" class="ui rounded image" alt="" style="width: 110px">
+                        </div>
+                    </div>
+                </div>
+                <div class="three wide column">
+                    <h4 class="ui inverted header m-text-thin m-text-spaced ">最新博客</h4>
+                    <div id="newblog-container">
+                        <div class="ui inverted link list" th:fragment="newBlogList">
+                            <a href="#" class="item m-text-thin" th:href="@{/blog/{id}(id=${blog.id})}" th:text="${blog.title}" th:each="blog : ${newBlogs}">用户故事（User Story）</a>
+                            <!--/*-->
+                            <a href="#" class="item m-text-thin">用户故事（User Story）</a>
+                            <a href="#" class="item m-text-thin">用户故事（User Story）</a>
+                            <!--*/-->
+                        </div>
+                    </div>
+
+                </div>
+                <div class="three wide column">
+                    <h4 class="ui inverted header m-text-thin m-text-spaced ">联系我</h4>
+                    <div class="ui inverted link list">
+                        <a href="#" class="item m-text-thin">Email：<span th:text="#{index.email}">xfy196@outlook.com</span></a>
+                        <a href="#" class="item m-text-thin">QQ：<span th:text="#{index.qq}">1964326366</span></a>
+                    </div>
+                </div>
+                <div class="seven wide column">
+                    <h4 class="ui inverted header m-text-thin m-text-spaced ">Blog</h4>
+                    <p class="m-text-thin m-text-spaced m-opacity-mini">这是我的个人博客、会分享关于编程、写作、思考相关的任何内容，希望可以给来到这儿的人有所帮助...</p>
+                </div>
+            </div>
+            <div class="ui inverted section divider"></div>
+            <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2018 - 2019 小小荧 Designed by 小小荧</p>
+        </div>
+    </footer>
+
+<!--js部分-->
+<th:block th:fragment="javascript">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    <script src="../../static/lib/editormd/editormd.min.js" th:src="@{/lib/editormd/editormd.min.js}"></script>
+    <script>
+        $('.ui.dropdown').dropdown({
+            on : 'hover'
+        });
+        $("#newblog-container").load(/*[[@{/footer/newBlogs}]]*/"/footer/newBlogs");
+
+        function updatePassword(obj) {
+            $('.ui.mini.modal').modal('show');
+        };
+        // 表单验证
+        $('.ui.form').form({
+            fields: {
+                oldPassword: {
+                    identifier: 'oldPassword',
+                    rules: [
+                        {
+                            type: 'empty',
+                            prompt: '旧密码不能为空'
+                        }
+                    ]
+                },
+                newPassword: {
+                    identifier: 'newPassword',
+                    rules: [{
+                        type: 'empty',
+                        prompt: '新密码不能为空'
+                    }]
+                }
+            }
+        });
+        //modal框关闭效果
+        $('.modal .close').on('click',function () {
+            $(this).closest('.modal').transition('fade');
+            //为type分类的下拉菜单设置清空的按钮
+            $('.item.ui.dropdown')
+                .dropdown('clear');
+        });
+
+    </script>
+</th:block>
+</body>
+</html>
