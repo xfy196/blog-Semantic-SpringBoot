@@ -8,8 +8,6 @@
 - jQuery
 
 ### 后端功能展示
-
-![](https://dss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2299740768,1218056410&fm=26&gp=0.jpg)
 - 博客列表管理
 
 ![UTOOLS1580650774364.png](http://yanxuan.nosdn.127.net/ccf703db7b77f526946efee68a029fa3.png)
