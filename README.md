@@ -14,7 +14,7 @@
 
 - 博客编辑功能
 
-![UTOOLS1580650828208.png](http://yanxuan.nosdn.127.net/cf1486d15060f25f8e1578009df47719.png)
+![UTOOLS1580650828208.png](projectimages/image2.png)
 
 - 博客搜索功能
 
@@ -120,11 +120,11 @@ yum remove -y mariadb*
 yum -y install mysql-community-server
 ```
 
-![](/Users/xxy/Desktop/code/Github/blog/projectimages/image15.png)
+![](projectimages/image15.png)
 
 #### 启动Mysql服务和查看服务是否正常启动
 
-![](/Users/xxy/Desktop/code/Github/blog/projectimages/image16.png)
+![](projectimages/image16.png)
 
 
 
@@ -134,11 +134,11 @@ yum -y install mysql-community-server
 grep "password" /var/log/mysqld.log
 ```
 
-![](/Users/xxy/Desktop/code/Github/blog/projectimages/image17.png)
+![](projectimages/image17.png)
 
 #### 进入数据库
 
-![](/Users/xxy/Desktop/code/Github/blog/projectimages/image18.png)
+![](projectimages/image18.png)
 
 #### 修改root用户密码
 
@@ -165,13 +165,13 @@ ALTER USER 'root'@'localhost' IDENTIFIED BY 'new password';
 >
 > SHOW VARIABLES LIKE ‘validate_password%’;（注意如果mysql没有取消忽略大小写规则，是带有大小写问题的）
 
-![](/Users/xxy/Desktop/code/Github/blog/projectimages/image19.png)
+![](projectimages/image19.png)
 
 #### 接下来你可以使用第三方工具连接你的数据库了
 
 但是这是后我们的连接工具会出现错误
 
-![](/Users/xxy/Desktop/code/Github/blog/projectimages/image20.png)
+![](projectimages/image20.png)
 
 我们需要让mysql服务器可以远程连接
 
@@ -185,7 +185,7 @@ flush privileges;
 
 这时候我们就连接成功了
 
-![](/Users/xxy/Desktop/code/Github/blog/projectimages/image21.png)
+![](projectimages/image21.png)
 
 然后创建一个名为blog的数据库
 
@@ -193,23 +193,23 @@ flush privileges;
 
 #### 导入bolg数据初始化文件
 
-![](/Users/xxy/Desktop/code/Github/blog/projectimages/image22.png)
+![](projectimages/image22.png)
 
-![](/Users/xxy/Desktop/code/Github/blog/projectimages/image23.png)
+![](projectimages/image23.png)
 
-![](/Users/xxy/Desktop/code/Github/blog/projectimages/image24.png)
+![](projectimages/image24.png)
 
 ### 安装tomcat服务
 
 [tomcat官网下载地址](http://tomcat.apache.org/)
 
-![](/Users/xxy/Desktop/code/Github/blog/projectimages/image25.png)
+![](projectimages/image25.png)
 
 这里我们选择tomcat9.0.30版本
 
 上传服务器中
 
-![](/Users/xxy/Desktop/code/Github/blog/projectimages/image26.png)
+![](projectimages/image26.png)
 
 ```shell
 # 解压
@@ -225,7 +225,7 @@ cd ../bin
 
 浏览器访问localhost:8080
 
-![](/Users/xxy/Desktop/code/Github/blog/projectimages/image27.png)
+![](projectimages/image27.png)
 
 博客管理路径为localhost:8080/admin
 
