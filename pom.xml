@@ -13,6 +13,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>blog</name>
     <description>个人博客网站</description>
+    <packaging>war</packaging>
 
     <properties>
         <java.version>1.8</java.version>

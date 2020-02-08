@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+    <link rel="stylesheet" href="../../static/css/me.css" th:href="@{/css/me.css}">
+    <title>500</title>
+</head>
+
+<body>
+
+<!--错误信息-->
+<div class="m-container-small m-padded-tb-massive">
+    <div class="ui error message m-padded-tb-massive">
+        <div class="ui container">
+            <h2>500</h2>
+            <p>对不起，系统服务错误，请重新进入</p>
+            <a href="#" th:href="@{/}" class="ui button teal basic">Index</a>
+            <a href="javascript:history.go(-1)" class="ui button red basic">返回</a>
+        </div>
+    </div>
+</div>
+
+
+<!-- 这里代表的是Thymeleaf的模板的方式html代表的注解，Thymeleaf中代表的是加载模板 -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+
+</body>
+</html>

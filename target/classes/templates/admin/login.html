@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<!-- 
+  登录的页面
+-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="_fragments :: head(~{::title})">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+  <link rel="stylesheet" href="../../static/css/typo.css" th:href="@{/css/typo.css}">
+  <link rel="stylesheet" href="../../static/css/animate.css" th:href="@{/css/animate.css}">
+  <link rel="stylesheet" href="../../static/lib/prism/prism.css" th:href="@{/lib/prism/prism.css}">
+  <link rel="stylesheet" href="../../static/lib/tocbot/tocbot.css" th:href="@{/lib/tocbot/tocbot.css}">
+  <link rel="stylesheet" href="../../static/css/me.css" th:href="@{/css/me.css}">
+  <title>管理员登录</title>
+</head>>
+
+<body>
+
+<div class="ui middle aligned center aligned grid m-container-small m-padded-tb-massive" style="width: 30em; !important;">
+  <div class="column">
+    <h2 class="ui teal image header">
+<!--      <img src="assets/images/logo.png" class="image">-->
+      <div class="content">
+        管理员登录
+      </div>
+    </h2>
+    <form class="ui large form" method="post" th:action="@{/admin/login}">
+      <div class="ui segment">
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="user icon"></i>
+            <input type="text" name="username" placeholder="用户名">
+          </div>
+        </div>
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="lock icon"></i>
+            <input type="password" name="password" placeholder="密码">
+          </div>
+        </div>
+        <button class="ui fluid large teal submit button">登录</button>
+      </div>
+
+<!--      前端的表单验证信息显示-->
+      <div class="ui error mini message"></div>
+      <div class="ui negative mini message" th:unless="${#strings.isEmpty(message)}" th:text="${message}">用户名和密码错误</div>
+
+    </form>
+  </div>
+</div>
+  <!-- 这里代表的是Thymeleaf的模板的方式html代表的注解，Thymeleaf中代表的是加载模板 -->
+  <!--/*/<th:block th:replace="_fragments :: javascript">/*/-->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery.scrollto@2.1.2/jquery.scrollTo.min.js"></script>
+
+  <script src="../static/lib/prism/prism.js"></script>
+  <script src="../static/lib/tocbot/tocbot.min.js"></script>
+  <script src="../static/lib/qrcode/qrcode.min.js"></script>
+  <script src="../static/lib/waypoints/jquery.waypoints.min.js"></script>
+  <!--/*/</th:block>/*/-->
+
+  <script>
+
+    $('.menu.toggle').click(function () {
+      $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+    // 初始化这个头像信息鼠标浮动上去的出现注销和修改密码的信息
+    $('.ui.dropdown').dropdown({
+      on: 'hover'
+    });
+    // 表单验证
+    $('.ui.form').form({
+      fields: {
+        username: {
+          identifier: 'username',
+          rules: [
+            {
+              type: 'empty',
+              prompt: '用户名不能为空'
+            }
+          ]
+        },
+        password: {
+          identifier: 'password',
+          rules: [{
+            type: 'empty',
+            prompt: '密码不能为空'
+          }]
+        }
+      }
+    });
+
+  </script>
+</body>
+
+</html>

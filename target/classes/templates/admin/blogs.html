@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<!-- 
+  博客文章管理的列表
+-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/_fragments :: head(~{::title})">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+  <link rel="stylesheet" href="../../static/css/typo.css" th:href="@{/css/typo.css}">
+  <link rel="stylesheet" href="../../static/css/animate.css" th:href="@{/css/animate.css}">
+  <link rel="stylesheet" href="../../static/lib/prism/prism.css" th:href="@{/lib/prism/prism.css}">
+  <link rel="stylesheet" href="../../static/lib/tocbot/tocbot.css" th:href="@{/lib/tocbot/tocbot.css}">
+  <link rel="stylesheet" href="../../static/css/me.css" th:href="@{/css/me.css}">
+  <title>博客管理</title>
+</head>
+
+<body>
+
+  <!--导航-->
+  <nav th:replace="admin/_fragments :: menu(1)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
+    <div class="ui container">
+      <div class="ui inverted secondary stackable menu">
+        <h2 class="ui teal header item">管理后台</h2>
+        <a href="#" class="active m-item item m-mobile-hide" th:classappend="${n==1} ? 'active'"><i class="home icon"></i>博客</a>
+        <a href="#" class=" m-item item m-mobile-hide" th:classappend="${n==2} ? 'active'"><i class="idea icon"></i>分类</a>
+        <a href="#" class="m-item item m-mobile-hide" th:classappend="${n==3} ? 'active'"><i class="tags icon"></i>标签</a>
+        <!-- 头像信息 -->
+        <div class="right aligned menu">
+          <div class="ui m-item m-mobile-hide dropdown item">
+            <div class="text">
+              <img class="ui avatar image" src="https://unsplash.it/100/100?image=1005">
+              许富荧
+            </div>
+            <i class="icon dropdown"></i>
+            <!-- 弹出的注销和修改密码的功能 -->
+            <div class="menu">
+              <a href="#" class="item">注销</a>
+              <a href="#" class="item">修改密码</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+      <i class="sidebar icon"></i>
+    </a>
+  </nav>
+
+<!--  模态框-->
+  <div class="ui modal" th:replace="admin/_fragments :: passwordModal">
+
+  </div>
+
+  <div class="ui attached pointing menu">
+    <div class="ui container">
+      <div class="menu right">
+        <a href="#" th:href="@{/admin/blog/input}" class="item">发布</a>
+        <a href="#" th:href="@{/admin/blogs}" class="teal item active">列表</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!--中间内容-->
+  <div id="waypoint" class="m-container-small m-padded-tb-big">
+    <!-- 博客 -->
+    <div class="ui container">
+      <div class="ui secondary segment form">
+        <div class="inline fields">
+          <div class="field">
+            <input type="text" placeholder="标题" name="title">
+          </div>
+          <div class="field">
+            <div class="ui labeled action input">
+              <div class="ui type selection dropdown">
+                <!--分类的id-->
+                <input type="hidden" name="typeId">
+                <i class="icon dropdown"></i>
+                <span class="default text">分类</span>
+                <div class="menu">
+                  <!--代表的是默认不选中的数据-->
+                  <div th:each="type : ${types}" th:data-value="${type.id}" th:text="${type.name}" class="item" data-value="1">错误日志</div>
+                </div>
+              </div>
+              <div class="ui clear compact button">clear</div>
+            </div>
+
+          </div>
+          <!-- 是否推荐 -->
+          <div class="field">
+            <div class="ui checkbox">
+              <input type="checkbox" id="recommend" name="recommend">
+              <label for="recommend">推荐</label>
+            </div>
+          </div>
+<!--          用来接收分页数据的隐藏域-->
+          <input type="hidden" name="page">
+          <!-- 搜索按钮 -->
+          <div class="field">
+            <button type="button" id="search-btn" class="ui teal  button mini"><i class="icon search"></i>搜索</button>
+          </div>
+          <div class="field">
+            <a href="#" th:href="@{/admin/blog/input}" class="ui mini teal button">新增</a>
+          </div>
+        </div>
+      </div>
+      <div id="table-container">
+        <!-- 文章列表  使用thymeleaf的fragment的完成动态局部刷新-->
+        <table th:fragment="blogList" class="ui compact teal table">
+          <thead>
+          <tr>
+            <th></th>
+            <th>标题</th>
+            <th>类型</th>
+            <th>推荐</th>
+            <th>发布状态</th>
+            <th>更新时间</th>
+            <th>操作</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="blog,iterStat : ${page.content}">
+            <td th:text="${iterStat.count}">1</td>
+            <td th:text="${blog.title}">刻意练习清单</td>
+            <td th:text="${blog.type.name}">认知提升</td>
+            <td th:text="${blog.recommend} ? '是' : '否'">是</td>
+            <td th:text="${blog.published} ? '发布' : '草稿'">草稿</td>
+            <td th:text="${blog.updateTime}">2019-10-13 09:45</td>
+            <td>
+              <a href="#" th:href="@{/admin/blog/input/{id}(id=${blog.id})}" class="ui teal  button mini">编辑</a>
+              <a href="#" th:href="@{/admin/blog/delete/{id}(id=${blog.id})}" class="ui red  button mini">删除</a>
+            </td>
+          </tr>
+          </tbody>
+          <!--  -->
+          <tfoot th:if="${page.totalPages} > 1">
+          <tr>
+            <th colspan="7">
+              <div class="ui pagination menu">
+                <a onclick="page(this)" th:attr="data-page=${page.number}-1"
+                   th:unless="${page.first}" class="icon item mini">上一页</a>
+                <a onclick="page(this)" th:attr="data-page=${page.number}+1"
+                   th:unless="${page.last}" class="icon item mini">下一页</a>
+              </div>
+            </th>
+          </tr>
+          </tfoot>
+        </table>
+          <!--消息提示框-->
+          <div class="ui message success" th:unless="${#strings.isEmpty(message)}">
+              <i class="icon close"></i>
+              <div class="header">提示</div>
+              <p th:text="${message}">操作成功</p>
+          </div>
+      </div>
+
+    </div>
+
+  </div>
+  <br>
+  <br>
+  <!--底部footer-->
+  <footer th:replace="admin/_fragments :: footer" class="ui inverted vertical segment m-padded-tb-massive">
+    <div class="ui center aligned container">
+      <div class="ui inverted divided stackable grid">
+        <div class="three wide column">
+          <div class="ui inverted link list">
+            <div class="item">
+              <img src="../static/images/wechat.png" th:src="@{/images/wechat.png}" class="ui rounded image" alt="" style="width: 110px">
+            </div>
+          </div>
+        </div>
+        <div class="three wide column">
+          <h4 class="ui inverted header m-text-thin m-text-spaced " >最新博客</h4>
+          <div class="ui inverted link list">
+            <a href="#" class="item m-text-thin">用户故事（User Story）</a>
+            <a href="#" class="item m-text-thin">用户故事（User Story）</a>
+            <a href="#" class="item m-text-thin">用户故事（User Story）</a>
+          </div>
+        </div>
+        <div class="three wide column">
+          <h4 class="ui inverted header m-text-thin m-text-spaced ">联系我</h4>
+          <div class="ui inverted link list">
+            <a href="#" class="item m-text-thin">Email：xfy196@outlook.com</a>
+            <a href="#" class="item m-text-thin">QQ：1964326366</a>
+          </div>
+        </div>
+        <div class="seven wide column">
+          <h4 class="ui inverted header m-text-thin m-text-spaced ">Blog</h4>
+          <p class="m-text-thin m-text-spaced m-opacity-mini">这是我的个人博客、会分享关于编程、写作、思考相关的任何内容，希望可以给来到这儿的人有所帮助...</p>
+        </div>
+      </div>
+      <div class="ui inverted section divider"></div>
+      <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2019 - 2020 小小荧 Designed by 小小荧</p>
+    </div>
+
+  </footer>
+
+  <!-- 这里代表的是Thymeleaf的模板的方式html代表的注解，Thymeleaf中代表的是加载模板 -->
+  <!--/*/<th:block th:replace="admin/_fragments :: javascript">/*/-->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery.scrollto@2.1.2/jquery.scrollTo.min.js"></script>
+
+  <script src="../../static/lib/prism/prism.js"></script>
+  <script src="../../static/lib/tocbot/tocbot.min.js"></script>
+  <script src="../../static/lib/qrcode/qrcode.min.js"></script>
+  <script src="../../static/lib/waypoints/jquery.waypoints.min.js"></script>
+  <!--/*/</th:block>/*/-->
+
+  <script>
+
+    //移动端或者屏幕适配的时候将导航隐藏出现导航的按钮
+    $('.menu.toggle').click(function () {
+      $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+    //为type分类的下拉菜单设置清空的按钮
+    $('.clear.button')
+            .on('click', function() {
+              $('.type.ui.dropdown')
+                      .dropdown('clear');
+            });
+
+    // 初始化这个头像信息鼠标浮动上去的出现注销和修改密码的信息
+    $('.ui.dropdown').dropdown({
+      on: 'hover'
+    });
+  //  page方法，用来完成查询，里面包括了查询啊条件和分页数据
+    function  page(obj) {
+      //将分页的隐藏域复制
+      $("[name='page']").val($(obj).data('page'));
+    //  执行ajax方法去调用接口返回数据
+      loadData();
+    }
+    //点击搜索按钮执行的方法
+    $("#search-btn").click(function () {
+      //每一次使用search按钮的时候我们都需要将page的页码清零
+      $("[name='page']").val(0);
+      loadData();
+    });
+    /**
+     * 执行ajax请求动态获取表格的数据
+     */
+    function loadData() {
+      $("#table-container").load(/*[[@{/admin/blogs/search}]]*/"/admin/blogs/search",{
+        title: $("[name='title']").val(),
+        typeId: $("[name='typeId']").val(),
+        recommend: $("[name='recommend']").prop('checked'),
+        page: $("[name='page']").val()
+      });
+    }
+    $('.message .close').on('click',function () {
+      $(this).closest('.message').transition('fade')
+    });
+  </script>
+</body>
+
+</html>
